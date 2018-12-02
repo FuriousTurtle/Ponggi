@@ -1,0 +1,76 @@
+body {
+	background-position: top;
+	background-repeat: no-repeat;
+	background-image: url(oofmegascene4.gif);
+}
+
+#monCanvas{
+	display: block;
+	margin: 0px auto;
+	margin-top: 60px;
+	border: 5px solid black;
+}
+
+#monCanvas:hover {
+	cursor: none;
+}
+
+#offset {
+	width: 100%;
+}
+
+#boss {
+	width: 400px;
+	height: 220px;
+	display: block;
+	margin: 0 auto;
+	margin-top: 30px;
+	background-image: url(boss.gif);
+	background-position: center;
+	background-size: cover;
+}
+
+#hpbar {
+	border: 1px solid black;
+	margin: 0 auto;
+	display: block;
+	width: 400px;
+	max-width:400px; 
+	height: 20px;
+	background-color: red;
+}
+
+#bossinfo {
+	text-align: center;
+	display: block;
+	margin: 0 auto;
+	margin-bottom: 20px;
+}
+
+#bossname {
+	margin : 10px auto;
+	font-weight: bold;
+	font-size: 30px;
+	-webkit-text-stroke-width: 2px;
+  	-webkit-text-stroke-color: black;
+	color:white;
+	font-family: 'Black Han Sans', sans-serif;
+}
+
+#realhp {
+	-webkit-text-stroke-width: 2px;
+  	-webkit-text-stroke-color: black;
+	color:white;
+	font-family: 'Black Han Sans', sans-serif;
+	font-size: 30px;
+	font-style: italic;
+}
+
+#shield {
+	-webkit-text-stroke-width: 2px;
+  	-webkit-text-stroke-color: black;
+	color: white;
+	font-family: 'Black Han Sans', sans-serif;
+	font-size: 30px;
+	font-style: italic;
+}
