@@ -2,17 +2,20 @@
 //-----------------------------SETUP-----------------------------//
 
 //------------PLAYER------------//
-playerThickness=80;                                                     //taille et skin du player et endroit de spawn//
+playerThickness=80;                                                    
 playerX=240-playerThickness/2;                                          
 playerHeight=10;
 player = new Image(playerX,340,playerThickness,playerHeight);
 player.src = 'player1.png';
 
 //------------BALL------------//
-ballSize=23;                                                            //taille, vitesse et skin de la balle et endroit de spawn//
+ballSize=23;                                                           
 ballX=ballY=50;
 ball = new Image(ballX-ballSize/2,ballY-ballSize/2,ballSize,ballSize);
-xVelocity=yVelocity=1;
+xVelocity=yVelocity=0;
+setTimeout(function(){
+  xVelocity=yVelocity=1;
+},2000);
 ballArray = new Array();
 ballArray[0] = 'lavaball1.png';
 ballArray[1] = 'lavaball2.png';
@@ -20,27 +23,28 @@ ballArray[2] = 'lavaball3.png';
 ballArray[3] = 'lavaball4.png';
 
 //------------BOSS------------//
-bossHp=1000;                                                            //hp et shield initial du boss et récupération//
-bossShield = 0;                                                         //des différents id pour la barre d'hp et les stats hp et shield//
-bossHpBar = document.getElementById('hpbar');                           //affichées au dessus du canvas//
+bossHp=1000;                                                           
+bossShield = 0;                                                       
+bossHpBar = document.getElementById('hpbar');                          
 bossHpState = document.getElementById('realhp');
 bossHpDiv = document.getElementById('realhpnumber');
 bossShieldDiv = document.getElementById('realshieldnumber');
 bossHpBarWidth = 400;
+bossProtecSpawn = 0;
 
 //------------OFFSET------------//
-canvasHitboxOffset = getComputedStyle(document.getElementById('offset')).getPropertyValue('width');                   //offset en calculant la moitié de la page html//
-canvasTrueOffset = ((canvasHitboxOffset.slice(0, -2)-480) / 2);                                                       //moins le canvas pour que les controles par//
-;                                                                                                                      //la souris soient correctement réglés//
+canvasHitboxOffset = getComputedStyle(document.getElementById('offset')).getPropertyValue('width');                  
+canvasTrueOffset = ((canvasHitboxOffset.slice(0, -2)-480) / 2);                                                       
+;                                                                                                                     
 
 //-----------------------------ONLOAD-----------------------------//
 
 window.onload=function() {
   canvasGet=document.getElementById('monCanvas');
-  canvas=canvasGet.getContext('2d');                                  //setup du canvas 2D//
-  setInterval(update,300/60);                                         //taux de refresh 60 refresh par 300 ms pour les positions//
-  setInterval(gifs,85/1);                                             //taux de refresh 1 refresh par 85 ms pour un effet de mouvement lent sur les textures//
-  canvasGet.addEventListener('mousemove',function(e){                 //fonction de controle par la souris//
+  canvas=canvasGet.getContext('2d');                                 
+  setInterval(update,300/60);                                         
+  setInterval(gifs,85/1);                                             
+  canvasGet.addEventListener('mousemove',function(e){                
     playerX = (e.clientX-playerThickness/2)-canvasTrueOffset;
   });
 }
@@ -48,21 +52,22 @@ window.onload=function() {
 //-----------------------------ONRESET-----------------------------//
 
 function reset(){
-  ballX=canvasGet.width/2;                                            //setup du spawn de la balle//
+  ballX=canvasGet.width/2;                                           
   ballY=canvasGet.height/2;
-  rand = Math.floor(Math.random() * Math.floor(2));                   //randomization de la direction initiale de la balle//
-  xVelocity = 1;                                                      //reset de la vitesse de la balle//
+  rand = Math.floor(Math.random() * Math.floor(2));                  
+  xVelocity = 1;                                                     
   if (rand==0) {
     xVelocity = -xVelocity
   }
   yVelocity=-1;
   syncHpBarPlus();
-   if (bossHpBarWidth > 1 && bossHp > 1){                             //condition pour regen le boss a 100% hp lorsqu'on perd la balle (1000 hp)//
+   if (bossHpBarWidth > 1 && bossHp > 1){                           
     bossHp = 1000;
   bossHpDiv.innerHTML = bossHp;
   bossShield=5;
   bossShieldDiv.innerHTML = bossShield;
   bossHpBarWidth = 400;
+  bossProtecSpawn = 1;
 };
 }
 
@@ -73,55 +78,65 @@ function gifs(){
 }
 
 function update(){
-  canvasX = canvasGet.width;                                          //setup des positions du canvas en cas de mouvement et clear du background a chaque frame//
+  canvasX = canvasGet.width;                                         
   canvasY = canvasGet.height;
   canvasbg = new Image();
   canvasbg.src = 'canvasbg.png';
   canvas.drawImage(canvasbg, 0, 0);
-  if (bossHp <= 0) {                                                  //condition pour vérifier que le boss est toujours bien en vie//
+  if (bossHp <= 0) {                                                
     setTimeout(function(){
       yVelocity = 0;
       xVelocity = 0;
     },200);
   }
-  ballX+=xVelocity;                                                   //ajout de la valeur de vélocité X et Y aux coordonnées X et Y //
-  ballY+=yVelocity;                                                   //de la balle pour animer le déplacement//
+  ballX+=xVelocity;                                                 
+  ballY+=yVelocity;                                                  
 
   if(ballX>canvasX) {
     xVelocity=-xVelocity;
   }
-  else if(ballY<0){                                                   //code lorsque la balle touche le coté supérieur du canvas//
+  else if(ballY<0){                                                
     yVelocity=-yVelocity;
-    if (bossShield == 0 && bossHpBarWidth > 1){                       //beaucoup de conditions pour vérifier l'état du boss, ses hp//
+    if (bossProtecSpawn == 1) {
+      bossProtecSpawn = 0;
+    }
+    else if (bossShield == 0 && bossHpBarWidth > 1){                     
       bossHp-=100;  
-      yVelocity+=0.5;                                                    //son shield et si il est encore en vie//
+        document.getElementById('hp100').style.display = "block"; 
+        document.getElementById('hp100').style.top = "1"+(Math.floor((Math.random() * 40) + 6))+"px";
+        document.getElementById('hp100').style.left = "1"+(Math.floor((Math.random() * 60) + 40))+"px"; 
+        setTimeout(function(){
+        document.getElementById('hp100').style.display = "none";
+      },250);
+      yVelocity+=0.5;                                                    
       syncHpBarMinus();
-      if (bossHp <= 0) {
+      bossHpDiv.innerHTML = bossHp; 
+      } else if (bossHp <= 0) {
         bossHpState.innerHTML = 'DEAD';
         document.getElementById('boss').style.backgroundImage = 'url("deadboss.png")'
         return;
-      } else {
-        bossHpDiv.innerHTML = bossHp; };                                                    //code pour passer brièvement le boss en rouge//
-        document.getElementById('boss').style.backgroundImage = 'url("oof.png")';           //lorsqu'il prend un coup de la balle//
-        setTimeout(function() {
-          document.getElementById('boss').style.backgroundImage = 'url("boss.gif")';
-        },200);
-      } else if (bossHpBarWidth > 1 && bossShield >= 1) {                                   //le shield du boss lui permet d'ignorer les dégats//
+      } else if (bossHpBarWidth > 1 && bossShield >= 1) {                                
       bossShield--;
       bossShieldDiv.innerHTML = bossShield;
       yVelocity+=0.5;  
+      document.getElementById('shield1').style.display = "block"; 
+      document.getElementById('shield1').style.top = "1"+(Math.floor((Math.random() * 40) + 6))+"px";
+      document.getElementById('shield1').style.left = "1"+(Math.floor((Math.random() * 60) + 40))+"px"; 
+      setTimeout(function(){
+      document.getElementById('shield1').style.display = "none";
+      },250);
     }
   }
   else if (ballX<0) {
     xVelocity=-xVelocity;
   }
-    else if (ballY>canvasY-25){                                                              //conditions si la balle rebondit sur le joueur//
-      if (ballX>playerX && ballX<playerX+playerThickness){                                   //ou si elle rebondit sur le coté bas du canvas//
-        yVelocity=-yVelocity;                                                                //ce qui aurait pour effet de lancer la fonction reset//
+    else if (ballY>canvasY-25){                                                         
+      if (ballX>playerX && ballX<playerX+playerThickness){                               
+        yVelocity=-yVelocity;                                                         
         deltaX = ballX-(playerX+playerThickness/2);
         xVelocity = deltaX*0.05;
       } else {
-          ballX=canvasGet.width/2;                                            //setup du spawn de la balle//
+          ballX=canvasGet.width/2;                                        
           ballY=canvasGet.height/2;
           xVelocity = 0;
           yVelocity = 0;
@@ -130,15 +145,15 @@ function update(){
           },800);
         }
       }
-    canvas.fillStyle="rgba(0,0,0,0)";                                                         //mise a jour de la position du joueur, de la balle//
-    canvas.fillRect(0,0,canvasGet.width,canvasGet.height);                                    //et clear du background//
+    canvas.fillStyle="rgba(0,0,0,0)";                                                    
+    canvas.fillRect(0,0,canvasGet.width,canvasGet.height);                                 
     canvas.drawImage(player,playerX,330,playerThickness,playerHeight+7);
     canvas.drawImage(ball,ballX-ballSize/2,ballY-ballSize/2,ballSize,ballSize);
   }
 
   //-----------------------------FUNCTIONS-----------------------------//
 
-  function syncHpBarPlus() {                                                                  //synchronisation entre les hp du boss et la barre de vie//
+  function syncHpBarPlus() {                                                               
     if (bossHpBarWidth < 400 && bossHpBarWidth > 1){
       bossHpBarWidth += 80;
       document.getElementById('hpbar').style.width = bossHpBarWidth+'px';
@@ -149,7 +164,7 @@ function update(){
     }
   }
 
-  function syncHpBarMinus() {                                                                 //synchronisation entre les hp du boss et la barre de vie//
+  function syncHpBarMinus() {                                                              
     if (bossHpBarWidth > 0){
       bossHpBarWidth -= 40;
       document.getElementById('hpbar').style.width = bossHpBarWidth+'px';
