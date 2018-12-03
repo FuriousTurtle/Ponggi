@@ -1,5 +1,7 @@
 
 //-----------------------------SETUP-----------------------------//
+IA = 1;
+Over = 0;
 
 //------------PLAYER------------//
 playerThickness=80;                                                    
@@ -43,11 +45,12 @@ window.onload=function() {
   canvasGet=document.getElementById('monCanvas');
   canvas=canvasGet.getContext('2d');                                 
   setInterval(update,300/60);                                         
-  setInterval(gifs,85/1);                                             
-  canvasGet.addEventListener('mousemove',function(e){                
-    playerX = (e.clientX-playerThickness/2)-canvasTrueOffset;
-  });
-}
+  setInterval(gifs,85/1);  
+  if (IA == 0) {                                           
+    canvasGet.addEventListener('mousemove',function(e){                
+      playerX = (e.clientX-playerThickness/2)-canvasTrueOffset;
+    });}
+  }
 
 //-----------------------------ONRESET-----------------------------//
 
@@ -61,14 +64,14 @@ function reset(){
   }
   yVelocity=-1;
   syncHpBarPlus();
-   if (bossHpBarWidth > 1 && bossHp > 1){                           
+  if (bossHpBarWidth > 1 && bossHp > 1){                           
     bossHp = 1000;
-  bossHpDiv.innerHTML = bossHp;
-  bossShield=5;
-  bossShieldDiv.innerHTML = bossShield;
-  bossHpBarWidth = 400;
-  bossProtecSpawn = 1;
-};
+    bossHpDiv.innerHTML = bossHp;
+    bossShield=5;
+    bossShieldDiv.innerHTML = bossShield;
+    bossHpBarWidth = 400;
+    bossProtecSpawn = 1;
+  };
 }
 
 //-----------------------------ONREFRESH-----------------------------//
@@ -77,18 +80,14 @@ function gifs(){
   ball.src = ballArray[Math.floor(Math.random() * ballArray.length)];
 }
 
+
+
 function update(){
   canvasX = canvasGet.width;                                         
   canvasY = canvasGet.height;
   canvasbg = new Image();
   canvasbg.src = 'canvasbg.png';
   canvas.drawImage(canvasbg, 0, 0);
-  if (bossHp <= 0) {                                                
-    setTimeout(function(){
-      yVelocity = 0;
-      xVelocity = 0;
-    },200);
-  }
   ballX+=xVelocity;                                                 
   ballY+=yVelocity;                                                  
 
@@ -99,23 +98,33 @@ function update(){
     yVelocity=-yVelocity;
     if (bossProtecSpawn == 1) {
       bossProtecSpawn = 0;
-    }
-    else if (bossShield == 0 && bossHpBarWidth > 1){                     
+    } else if (bossShield == 1) {
+      yVelocity = 1;
+      bossShield--;
+      bossShieldDiv.innerHTML = bossShield;
+    } else if (bossShield == 0 && bossHpBarWidth > 40){             
       bossHp-=100;  
-        document.getElementById('hp100').style.display = "block"; 
-        document.getElementById('hp100').style.top = "1"+(Math.floor((Math.random() * 40) + 6))+"px";
-        document.getElementById('hp100').style.left = "1"+(Math.floor((Math.random() * 60) + 40))+"px"; 
-        setTimeout(function(){
+      document.getElementById('hp100').style.display = "block"; 
+      document.getElementById('hp100').style.top = "1"+(Math.floor((Math.random() * 40) + 6))+"px";
+      document.getElementById('hp100').style.left = "1"+(Math.floor((Math.random() * 60) + 40))+"px"; 
+      setTimeout(function(){
         document.getElementById('hp100').style.display = "none";
       },250);
       yVelocity+=0.5;                                                    
       syncHpBarMinus();
       bossHpDiv.innerHTML = bossHp; 
-      } else if (bossHp <= 0) {
-        bossHpState.innerHTML = 'DEAD';
-        document.getElementById('boss').style.backgroundImage = 'url("deadboss.png")'
-        return;
-      } else if (bossHpBarWidth > 1 && bossShield >= 1) {                                
+    } else if (bossHp == 100) {
+      syncHpBarMinus();
+      setTimeout(function(){
+      yVelocity = 0;
+      xVelocity = 0;
+    },200);
+      bossHpState.innerHTML = 'DEAD';
+      document.getElementById('boss').style.backgroundImage = 'url("deadboss.png")'; 
+      if (Over == 0) {
+      Over++;
+    }
+    } else if (bossHpBarWidth > 1 && bossShield >= 1) {                                
       bossShield--;
       bossShieldDiv.innerHTML = bossShield;
       yVelocity+=0.5;  
@@ -123,33 +132,39 @@ function update(){
       document.getElementById('shield1').style.top = "1"+(Math.floor((Math.random() * 40) + 6))+"px";
       document.getElementById('shield1').style.left = "1"+(Math.floor((Math.random() * 60) + 40))+"px"; 
       setTimeout(function(){
-      document.getElementById('shield1').style.display = "none";
+        document.getElementById('shield1').style.display = "none";
       },250);
     }
   }
   else if (ballX<0) {
     xVelocity=-xVelocity;
   }
-    else if (ballY>canvasY-25){                                                         
-      if (ballX>playerX && ballX<playerX+playerThickness){                               
-        yVelocity=-yVelocity;                                                         
-        deltaX = ballX-(playerX+playerThickness/2);
-        xVelocity = deltaX*0.05;
-      } else {
-          ballX=canvasGet.width/2;                                        
-          ballY=canvasGet.height/2;
-          xVelocity = 0;
-          yVelocity = 0;
-          setTimeout(function(){
-            reset();
-          },800);
-        }
-      }
-    canvas.fillStyle="rgba(0,0,0,0)";                                                    
-    canvas.fillRect(0,0,canvasGet.width,canvasGet.height);                                 
-    canvas.drawImage(player,playerX,330,playerThickness,playerHeight+7);
-    canvas.drawImage(ball,ballX-ballSize/2,ballY-ballSize/2,ballSize,ballSize);
+  else if (ballY>canvasY-25){                                                         
+    if (ballX>playerX && ballX<playerX+playerThickness){                               
+      yVelocity=-yVelocity;                                                         
+      deltaX = ballX-(playerX+playerThickness/2);
+      xVelocity = deltaX*0.05;
+    } else {
+      ballX=canvasGet.width/2;                                        
+      ballY=canvasGet.height/2;
+      xVelocity = 0;
+      yVelocity = 0;
+      setTimeout(function(){
+        reset();
+      },800);
+    }
   }
+  canvas.fillStyle="rgba(0,0,0,0)";                                                    
+  canvas.fillRect(0,0,canvasGet.width,canvasGet.height);     
+  if (IA == 0) {                            
+    canvas.drawImage(player,playerX,330,playerThickness,playerHeight+7);
+  }
+  else if (IA == 1) {
+    playerX = ballX-(playerThickness/2);
+    canvas.drawImage(player,playerX,330,playerThickness,playerHeight+7);
+  }
+  canvas.drawImage(ball,ballX-ballSize/2,ballY-ballSize/2,ballSize,ballSize);
+}
 
   //-----------------------------FUNCTIONS-----------------------------//
 
