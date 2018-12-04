@@ -32,12 +32,7 @@ bossHpState = document.getElementById('realhp');
 bossHpDiv = document.getElementById('realhpnumber');
 bossShieldDiv = document.getElementById('realshieldnumber');
 bossHpBarWidth = 400;
-bossProtecSpawn = 0;
-
-//------------OFFSET------------//
-canvasHitboxOffset = getComputedStyle(document.getElementById('offset')).getPropertyValue('width');                  
-canvasTrueOffset = ((canvasHitboxOffset.slice(0, -2)-480) / 2);                                                       
-;                                                                                                                     
+bossProtecSpawn = 0;                                                                                                                   
 
 //-----------------------------ONLOAD-----------------------------//
 
@@ -51,6 +46,11 @@ window.onload=function() {
       playerX = (e.clientX-playerThickness/2)-canvasTrueOffset;
     });}
   }
+
+  //------------OFFSET------------//
+canvasHitboxOffset = getComputedStyle(document.getElementById('offset')).getPropertyValue('width');                  
+canvasTrueOffset = ((canvasHitboxOffset.slice(0, -2)-480) / 2);                                                       
+victoryOffset = ((canvasHitboxOffset.slice(0, -2)/ 2)- 140);  
 
 //-----------------------------ONRESET-----------------------------//
 
@@ -105,8 +105,8 @@ function update(){
     } else if (bossShield == 0 && bossHpBarWidth > 40){             
       bossHp-=100;  
       document.getElementById('hp100').style.display = "block"; 
-      document.getElementById('hp100').style.top = "1"+(Math.floor((Math.random() * 40) + 6))+"px";
-      document.getElementById('hp100').style.left = "1"+(Math.floor((Math.random() * 60) + 40))+"px"; 
+      document.getElementById('hp100').style.top = "20px";
+      document.getElementById('hp100').style.left ="40px"; 
       setTimeout(function(){
         document.getElementById('hp100').style.display = "none";
       },250);
@@ -115,13 +115,16 @@ function update(){
       bossHpDiv.innerHTML = bossHp; 
     } else if (bossHp == 100) {
       syncHpBarMinus();
-      setTimeout(function(){
-      yVelocity = 0;
-      xVelocity = 0;
-    },200);
       bossHpState.innerHTML = 'DEAD';
       document.getElementById('boss').style.backgroundImage = 'url("deadboss.png")'; 
       if (Over == 0) {
+        xVelocity = 0;
+        yVelocity = 0;
+        document.getElementById('victoire').style.display = "block";
+        document.getElementById('victoire').style.left = victoryOffset+"px";
+        document.getElementById('hpbar').style.border = '0px';
+        ballSize = 0;
+        document.getElementById('boss').style.marginTop = "10px";
       Over++;
     }
     } else if (bossHpBarWidth > 1 && bossShield >= 1) {                                
@@ -129,8 +132,8 @@ function update(){
       bossShieldDiv.innerHTML = bossShield;
       yVelocity+=0.5;  
       document.getElementById('shield1').style.display = "block"; 
-      document.getElementById('shield1').style.top = "1"+(Math.floor((Math.random() * 40) + 6))+"px";
-      document.getElementById('shield1').style.left = "1"+(Math.floor((Math.random() * 60) + 40))+"px"; 
+      document.getElementById('shield1').style.top = "20px";
+      document.getElementById('shield1').style.left = "40px"; 
       setTimeout(function(){
         document.getElementById('shield1').style.display = "none";
       },250);

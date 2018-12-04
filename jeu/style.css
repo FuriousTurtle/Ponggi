@@ -19,6 +19,15 @@ body {
 	width: 100%;
 }
 
+#victoire {
+	display: none;
+	width: 300px;
+	height: 170px;
+	z-index: 2;
+	position: absolute;
+	top:400px;
+}
+
 #boss {
 	position: relative;
 	width: 400px;
@@ -102,4 +111,37 @@ body {
 	background-repeat: no-repeat;
 	width: 100px;
 	height: 80px;
+}
+
+
+@media only screen and (max-width: 1400px) {
+	body {
+	background-position: top;
+	background-size: cover;
+	background-repeat: no-repeat;
+}
+#boss {
+	width: 230px;
+	height: 130px;
+	margin-top:0px;
+}
+#bossname {
+	font-size: 18px;
+}
+#realhp {
+	font-size: 22px;
+}
+#shield {
+	font-size: 22px;
+}
+#monCanvas {
+	margin-top: -20px;
+}
+#victoire {
+	top:300px;
+}
+#hpbar {
+	height: 10px;
+	margin-bottom: 10px;
+}
 }
