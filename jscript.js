@@ -1,10 +1,13 @@
 $(function(){
-
+//Le bouton jouer redirige sur la page du jeu
 $("#inJouer").click(function(){
 	$("#menuAccueil").css("display", "none");
 	window.location.href = "jeu/index.html";
 });
 
+
+//Le bouton Options cache le menu principal et fait apparaitre le menu options grâce à une suite de
+//display none et display block, le système est le même pour chaque bouton
 $("#inOptions").click(function(){
 	$("#menuAccueil").css("display", "none");
 	$("#menuOptions").css("display", "block");
@@ -35,12 +38,14 @@ $("#inEnSavPlus").click(function(){
 
 //-------------------------------------OPTIONS-------------------------------------//
 
+//fonction pour désactiver le son (inutile puisqu'il n'y a pas de son !)
 $("#inMuteOff").click(function(){
 	$("#inMuteOn").css("display", "block");
 	$("#inMuteOff").css("display", "none");
 	$("html").volume = 0;
 });
 
+//remettre le son !
 $("#inMuteOn").click(function(){
 	$("#inMuteOff").css("display", "block");
 	$("#inMuteOn").css("display", "none");
