@@ -105,8 +105,8 @@ function update(){
     } else if (bossShield == 0 && bossHpBarWidth > 40){             
       bossHp-=100;  
       document.getElementById('hp100').style.display = "block"; 
-      document.getElementById('hp100').style.top = "20px";
-      document.getElementById('hp100').style.left ="40px"; 
+      document.getElementById('hp100').style.top = "50px";
+      document.getElementById('hp100').style.left ="100px"; 
       setTimeout(function(){
         document.getElementById('hp100').style.display = "none";
       },250);
@@ -132,8 +132,8 @@ function update(){
       bossShieldDiv.innerHTML = bossShield;
       yVelocity+=0.5;  
       document.getElementById('shield1').style.display = "block"; 
-      document.getElementById('shield1').style.top = "20px";
-      document.getElementById('shield1').style.left = "40px"; 
+      document.getElementById('shield1').style.top = "50px";
+      document.getElementById('shield1').style.left = "100px"; 
       setTimeout(function(){
         document.getElementById('shield1').style.display = "none";
       },250);
