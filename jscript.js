@@ -22,7 +22,7 @@ $("#inOptions").click(function(){
 
 $("#inEnSavPlus").click(function(){
 	$("#menuAccueil").css("display", "none");
-	$("body").append("<div id='savPlus' style='opacity:0;text-align:center;color:white;font-size:25px;display:block;margin:0 auto; width:400px;margin-top:200px;'><h1>Projet DTA Pong customisé</h1><p>Ce projet à été créé le 12 Novembre 2018 par Pierrick et Tony, il devrait être finalisé pour le 28 Novembre.<br><br>Il s'agit de créer un jeu vidéo basé sur pong et de le customiser afin de<br>gagner en expérience avec les différents langages de codage.<br>Nous avons choisi d'utiliser jQuery 3.3.1, HTML5 et CSS3. </p><input style='margin:0 auto;' type='button' id='inReturn3' value='Retour'></div>");
+	$("body").append("<div id='savPlus' style='opacity:0;text-align:center;color:white;font-size:21.5px;display:block;margin:0 auto; width:400px;margin-top:200px;'><h1>Projet DTA Pong customisé</h1><p>Ce projet à été créé le 12 Novembre 2018 par Pierrick et Tony, il a été finalisé le 28 Novembre.<br><br>Il s'agit de créer un jeu vidéo basé sur pong et de le customiser afin de<br>gagner en expérience avec les différents langages de codage.<br>Nous avons choisi d'utiliser jQuery 3.3.1, HTML5 et CSS3. </p><input style='margin:0 auto;' type='button' id='inReturn3' value='Retour'></div>");
 	$("#savPlus").css("opacity","0");
 	$("#savPlus").animate({opacity : '1'},'slow');	
 	$("#inReturn3").click(function(){
